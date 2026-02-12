@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Generador de RFC</title>
+</head>
+<body>
+    <h1>Generador de RFC</h1>
+    <form id="formRfc">
+        <label>Nombre: <input type="text" id="nombre"></label><br><br>
+        <label>Apellido Paterno: <input type="text" id="paterno"></label><br><br>
+        <label>Apellido Materno: <input type="text" id="materno"></label><br><br>
+        <label>Fecha de Nacimiento: <input type="date" id="fecha"></label><br><br>
+        <button type="button" onclick="generarRfc()">Generar RFC</button>
+    </form>
+    <br>
+    <a href="index.html">Volver al Menú</a>
+
+    <h3>Resultado: <span id="resultadoRfc"></span></h3>
+
+    <script>
+        function generarRfc() {
+            // Usamos .trim() para quitar espacios accidentales y toUpperCase() para estandarizar
+            var nombre = document.getElementById("nombre").value.trim().toUpperCase();
+            var paterno = document.getElementById("paterno").value.trim().toUpperCase();
+            var materno = document.getElementById("materno").value.trim().toUpperCase();
+            var fecha = document.getElementById("fecha").value; // Viene como YYYY-MM-DD
+
+            if(!nombre || !paterno || !materno || !fecha) {
+                alert("Por favor llena todos los campos");
+                return;
+            }
+            
+            // Primera letra del paterno + primera vocal interna del paterno
+            // 0 es la primera letra , 1 la segunda 
+            var letra1 = paterno.charAt(0);
+            var letra2 = '';
+            
+            // Buscar la primera vocal interna del paterno
+            for(var i = 1; i < paterno.length; i++) {
+                var c = paterno.charAt(i);
+                if(c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U') {
+                    letra2 = c;
+                    break;
+                }
+            }
+
+            var letra3 = materno.charAt(0);
+            var letra4 = nombre.charAt(0);
+
+            // Fecha: quitar guiones y tomar los últimos 6 (YYMMDD)
+            // El input date regresa YYYY-MM-DD (ej: 2001-09-11)
+            var fechaSinGuiones = fecha.replace(/-/g, ""); // 20010520
+            var fechaRfc = fechaSinGuiones.substring(2); // 010520
+
+            var rfcConstruido = letra1 + letra2 + letra3 + letra4 + fechaRfc;
+
+            
+            document.getElementById("resultadoRfc").innerText = rfcConstruido;
+
+            //Llamar a la función que construye el JSON
+            var objetoJson = construirJsonRfc(nombre, paterno, materno, fecha, rfcConstruido);
+            console.log("Objeto JSON generado:", objetoJson);
+        }
+        function construirJsonRfc(nom, pat, mat, fec, rfc) {
+            var datos = {
+                nombre: nom,
+                apellidoPaterno: pat,
+                apellidoMaterno: mat,
+                fechaNacimiento: fec,
+                rfcGenerado: rfc
+            };
+            return JSON.stringify(datos); // Retornamos el string JSON
+        }
+    </script>
+</body>
+</html>

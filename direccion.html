@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Direccion</title>
+</head>
+<body>
+    <h1>Direccion</h1>
+    <form id="formRfc">
+        <label>Calle: <input type="text" id="nombre"></label><br><br>
+        <label>Numero: <input type="text" id="paterno"></label><br><br>
+        <label>Colonia: <input type="text" id="materno"></label><br><br>
+        <label>Codigo Postal: <input type="text" id="fecha"></label><br><br>
+        <label>Estado: <input type="text" id="estado"></label><br><br>
+        <button type="button" onclick="generarDireccion()">Generar Dirección</button>
+    </form>
+    <br>
+    <a href="index.html">Volver al Menú</a>
+
+    <h3>Resultado: <span id="resultadoDireccion"></span></h3>
+
+    <script>
+        function generarDireccion() {
+            var calle = document.getElementById("nombre").value.trim();
+            var numero = document.getElementById("paterno").value.trim();
+            var colonia = document.getElementById("materno").value.trim();
+            var codigoPostal = document.getElementById("fecha").value.trim();
+            var estado = document.getElementById("estado").value.trim();
+
+            if(!calle || !numero || !colonia || !codigoPostal || !estado) {
+                alert("Por favor llena todos los campos");
+                return;
+            }
+            
+            var direccionConstruida = calle + " " + numero + ", " + colonia + ", CP " + codigoPostal + ", " + estado;
+            
+            document.getElementById("resultadoDireccion").innerText = direccionConstruida;
+
+            var objetoJson = construirJsonDireccion(calle, numero, colonia, codigoPostal, estado, direccionConstruida);
+            console.log("Objeto JSON generado:", objetoJson);
+        }
+        function construirJsonDireccion(calle, numero, colonia, codigoPostal, estado) {
+            var datos = {
+                calle: calle,
+                numero: numero,
+                colonia: colonia,
+                codigoPostal: codigoPostal,
+                estado: estado,
+            };
+            return JSON.stringify(datos); 
+        }
+    </script>
+</body> 
+</html>
